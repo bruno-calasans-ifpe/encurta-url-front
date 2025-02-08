@@ -23,7 +23,7 @@ import { Button } from "../ui/Button";
 import { LogInIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const loginFormSchema = z.object({
+const registerFormSchema = z.object({
   email: z
     .string()
     .min(1, "Email não pode estar vazio")
@@ -31,22 +31,22 @@ const loginFormSchema = z.object({
   password: z.string().min(1, "Senha não pode estar vazia"),
 });
 
-type LoginFormInput = z.infer<typeof loginFormSchema>;
+type RegisterFormInput = z.infer<typeof registerFormSchema>;
 
-type LoginFormProps = {};
+type RegisterFormProps = {};
 
-export default function LoginForm({}: LoginFormProps) {
+export default function RegisterForm({}: RegisterFormProps) {
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<LoginFormInput>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<RegisterFormInput>({
+    resolver: zodResolver(registerFormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  function onSubmit(values: LoginFormInput) {
+  function onSubmit(values: RegisterFormInput) {
     setLoading(true);
     console.log(values);
     setLoading(false);
@@ -61,9 +61,9 @@ export default function LoginForm({}: LoginFormProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Fazer login com sua conta</CardTitle>
+        <CardTitle>Criar conta</CardTitle>
         <CardDescription>
-          Acesse sua conta informando para poder ver suas URL's criadas.
+          Crie sua conta para poder salvar suas URL's encurtadas.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -85,9 +85,7 @@ export default function LoginForm({}: LoginFormProps) {
                       placeholder="Seu email"
                       className={cn(
                         "focus-visible:ring-transparent",
-                        // !isEmailFieldInvalid &&
-                        //   isEmailFieldTouched &&
-                        //   "border-emerald-500",
+
                         isEmailFieldInvalid &&
                           isEmailFieldTouched &&
                           "border-red-500"
@@ -113,9 +111,6 @@ export default function LoginForm({}: LoginFormProps) {
                       autoComplete="on"
                       className={cn(
                         "focus-visible:ring-transparent",
-                        // !isPasswordFieldInvalid &&
-                        //   isPasswordFieldTouched &&
-                        //   "border-emerald-500",
                         isPasswordFieldInvalid &&
                           isPasswordFieldTouched &&
                           "border-red-500"
@@ -129,21 +124,23 @@ export default function LoginForm({}: LoginFormProps) {
 
             {/* Form buttons */}
             <div className="flex justify-between">
+              {/*  */}
               <Button
                 disabled={loading}
                 type="submit"
-                className=" bg-indigo-600 hover:bg-indigo-700 transition-all font-bold"
+                className=" bg-emerald-600 hover:bg-emerald-700 transition-all font-bold"
               >
                 <LogInIcon />
-                {loading ? "Carregando..." : "Entrar"}
+                {loading ? "Carregando..." : "Registrar"}
               </Button>
-              <a href="/auth/register">
+
+              <a href="/auth/login">
                 <Button
                   type="button"
                   variant="link"
                   className="hover:text-indigo-600 transition-all"
                 >
-                  <p>Não tenho conta</p>
+                  <p>Já tenho conta</p>
                 </Button>
               </a>
             </div>

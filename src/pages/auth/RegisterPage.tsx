@@ -1,5 +1,11 @@
+import RegisterForm from "@/components/auth/RegisterForm";
+
 type RegisterPageProps = {};
 
 export default function RegisterPage({}: RegisterPageProps) {
-  return <div>RegisterPage</div>;
+  return (
+    <section>
+      <RegisterForm />
+    </section>
+  );
 }

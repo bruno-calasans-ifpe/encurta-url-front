@@ -4,8 +4,8 @@ type LoginPageProps = {};
 
 export default function LoginPage({}: LoginPageProps) {
   return (
-    <div>
+    <section>
       <LoginForm />
-    </div>
+    </section>
   );
 }
