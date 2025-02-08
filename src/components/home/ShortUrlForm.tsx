@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const createUrlFormSchema = z.object({
   url: z.string().min(1, "URL não pode estar vazia").url("URL inválida"),
@@ -23,6 +24,7 @@ type ShortUrlFormProps = {};
 
 export default function ShortUrlForm({}: ShortUrlFormProps) {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const form = useForm<ShortUrlFormInput>({
     resolver: zodResolver(createUrlFormSchema),
@@ -35,6 +37,7 @@ export default function ShortUrlForm({}: ShortUrlFormProps) {
     // Short url
     setLoading(true);
     console.log(values);
+    navigate("/url/asdas131");
     setLoading(false);
   }
 
