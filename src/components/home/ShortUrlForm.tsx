@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import Loader from "../custom/Loader";
 
 const createUrlFormSchema = z.object({
   url: z.string().min(1, "URL não pode estar vazia").url("URL inválida"),

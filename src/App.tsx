@@ -3,13 +3,14 @@ import Header from "./components/layout/Header";
 import HomePage from "./pages/home/HomePage";
 import LoginPage from "./pages/auth/LoginPage";
 import RegisterPage from "./pages/auth/RegisterPage";
+import ContentContainer from "./components/custom/ContentContainer";
 
 function App() {
   return (
     <>
       <Header />
       {/* main */}
-      <main className="p-10">
+      <ContentContainer>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<HomePage />}>
@@ -19,7 +20,7 @@ function App() {
             <Route path="/auth/register" element={<RegisterPage />} />
           </Routes>
         </BrowserRouter>
-      </main>
+      </ContentContainer>
       {/* Footer */}
     </>
   );

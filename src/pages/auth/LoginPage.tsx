@@ -1,5 +1,11 @@
+import LoginForm from "@/components/auth/LoginForm";
+
 type LoginPageProps = {};
 
 export default function LoginPage({}: LoginPageProps) {
-  return <div>LoginPage</div>;
+  return (
+    <div>
+      <LoginForm />
+    </div>
+  );
 }
