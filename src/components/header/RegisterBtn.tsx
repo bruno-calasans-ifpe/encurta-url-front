@@ -5,7 +5,7 @@ type RegisterBtnProps = {};
 
 export default function RegisterBtn({}: RegisterBtnProps) {
   return (
-    <a id="register-btn" href="/">
+    <a id="register-btn" href="/auth/register">
       <Button
         size="sm"
         variant="outline"

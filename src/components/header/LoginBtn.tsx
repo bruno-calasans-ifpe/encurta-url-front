@@ -5,7 +5,7 @@ type LoginBtnProps = {};
 
 export default function LoginBtn({}: LoginBtnProps) {
   return (
-    <a id="login-btn" href="/">
+    <a id="login-btn" href="/auth/login">
       <Button
         size="sm"
         variant="outline"
