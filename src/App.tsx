@@ -6,6 +6,7 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import ContentContainer from "./components/custom/ContentContainer";
 import UrlPagePage from "./pages/url/UrlPage";
 import UrlAccessPage from "./pages/url-access/UrlAccessPage";
+import UrlRedirectPage from "./pages/url-redirect/UrlRedirectPage";
 
 function App() {
   return (
@@ -15,13 +16,12 @@ function App() {
       <ContentContainer>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<HomePage />}>
-              {/* <Route path="*" element={<NoPage />} /> */}
-            </Route>
             <Route path="/auth/login" element={<LoginPage />} />
             <Route path="/auth/register" element={<RegisterPage />} />
             <Route path="/url/:urlId" element={<UrlPagePage />} />
             <Route path="/url-access/:urlId" element={<UrlAccessPage />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/:urlId" element={<UrlRedirectPage />} />
           </Routes>
         </BrowserRouter>
       </ContentContainer>
