@@ -27,6 +27,7 @@ import { AxiosError } from "axios";
 import useCustomToast from "@/hooks/useCustomToast";
 import { ApiError } from "@/api/ApiError";
 import useAuthStore from "@/store/authStore";
+import { redirect } from "react-router";
 
 const loginFormSchema = z.object({
   email: z
@@ -56,12 +57,11 @@ export default function LoginForm({}: LoginFormProps) {
   const loginHandler = async (inputs: LoginFormInput) => {
     setLoading(true);
     try {
-      
       const { accessToken, user } = await authApi.login(inputs);
       login(user, accessToken);
       localStorage.setItem("token", accessToken);
       successToast("Sucesso: Login", "Login realizado com sucesso");
-
+      redirect("/");
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 403)

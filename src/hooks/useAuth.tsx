@@ -17,9 +17,7 @@ export default function useAuth() {
       // Salva dados em memória
       login(data.user, token);
     } catch (error) {
-      // Desloga e remove token do localstorage
       logout();
-      localStorage.removeItem("token");
     }
   };
 

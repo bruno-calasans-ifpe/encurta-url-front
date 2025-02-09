@@ -2,7 +2,7 @@ import CreateShortUrlBtn from "@/components/header/CreateUrlBtn";
 import LoginBtn from "@/components/header/LoginBtn";
 import RegisterBtn from "../header/RegisterBtn";
 import useAuthStore from "@/store/authStore";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import UserMenu from "../header/UserMenu";
 
 export default function Header() {
   const { user } = useAuthStore();
@@ -18,7 +18,7 @@ export default function Header() {
       </div>
 
       {/* Buttons */}
-      <div id="header-buttons" className="flex gap-2">
+      <div id="header-buttons" className="flex gap-1 items-center">
         <CreateShortUrlBtn />
 
         {/* Usuário deslogado */}
@@ -30,14 +30,7 @@ export default function Header() {
         )}
 
         {/* Usuário logado */}
-        {user && (
-          <>
-            <Avatar>
-              <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-              <AvatarFallback>CN</AvatarFallback>
-            </Avatar>
-          </>
-        )}
+        <UserMenu />
       </div>
     </header>
   );

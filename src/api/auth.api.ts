@@ -25,7 +25,6 @@ export default {
     return data;
   },
   async checkAuth(accessToken: string) {
-    console.log(accessToken);
     return api.get<{ message: string; user: User }>("/auth/check", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
