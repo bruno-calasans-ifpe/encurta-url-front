@@ -17,18 +17,25 @@ import {
   FormItem,
   FormMessage,
   FormLabel,
+  FormDescription,
 } from "@/components/ui/form";
 import { useState } from "react";
 import { Button } from "../ui/Button";
 import { LogInIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import authApi from "@/api/auth.api";
+import useCustomToast from "@/hooks/useCustomToast";
+import { AxiosError } from "axios";
+import useAuthStore from "@/store/authStore";
+import { redirect } from "react-router";
 
 const registerFormSchema = z.object({
+  name: z.string().min(1, "Nome é obrigatório"),
   email: z
     .string()
     .min(1, "Email não pode estar vazio")
     .email("Email inválido"),
-  password: z.string().min(1, "Senha não pode estar vazia"),
+  password: z.string().min(6, "Senha deve ter 6 ou mais caracteres"),
 });
 
 type RegisterFormInput = z.infer<typeof registerFormSchema>;
@@ -36,6 +43,8 @@ type RegisterFormInput = z.infer<typeof registerFormSchema>;
 type RegisterFormProps = {};
 
 export default function RegisterForm({}: RegisterFormProps) {
+  const authStore = useAuthStore();
+  const { successToast, errorToast } = useCustomToast();
   const [loading, setLoading] = useState(false);
 
   const form = useForm<RegisterFormInput>({
@@ -43,14 +52,42 @@ export default function RegisterForm({}: RegisterFormProps) {
     defaultValues: {
       email: "",
       password: "",
+      name: "",
     },
   });
 
-  function onSubmit(values: RegisterFormInput) {
+  const registerUserHandler = async (inputs: RegisterFormInput) => {
     setLoading(true);
-    console.log(values);
+    try {
+      // Cadastra usuário
+      const { user } = await authApi.register(inputs);
+
+      // Faz login automaticamente
+      const { accessToken } = await authApi.login({
+        email: inputs.email,
+        password: inputs.password,
+      });
+
+      authStore.login(user, accessToken);
+      form.reset();
+      successToast("Sucesso: Cadastro", "Cadastro realizado com sucesso");
+      redirect("/");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 409)
+          errorToast("Error: Cadastro", "Email já está em uso.");
+      } else {
+        errorToast(
+          "Error: Desconhecido",
+          "Algo deu errado. Tente novamente mais tarde."
+        );
+      }
+    }
     setLoading(false);
-  }
+  };
+
+  const { invalid: isNameInvalid, isTouched: isNameFieldTouched } =
+    form.getFieldState("name");
 
   const { invalid: isEmailFieldInvalid, isTouched: isEmailFieldTouched } =
     form.getFieldState("email");
@@ -70,9 +107,29 @@ export default function RegisterForm({}: RegisterFormProps) {
         <Form {...form}>
           <form
             id="short-url-form"
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(registerUserHandler)}
             className="space-y-4"
           >
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Nome</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder="Seu nome"
+                      className={cn(
+                        "focus-visible:ring-transparent",
+                        isNameInvalid && isNameFieldTouched && "border-red-500"
+                      )}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"
@@ -117,6 +174,9 @@ export default function RegisterForm({}: RegisterFormProps) {
                       )}
                     />
                   </FormControl>
+                  <FormDescription>
+                    Sua senha deve ter 6 ou mais caracteres
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -26,6 +26,7 @@ import authApi from "@/api/auth.api";
 import { AxiosError } from "axios";
 import useCustomToast from "@/hooks/useCustomToast";
 import { ApiError } from "@/api/ApiError";
+import useAuthStore from "@/store/authStore";
 
 const loginFormSchema = z.object({
   email: z
@@ -40,6 +41,7 @@ type LoginFormInput = z.infer<typeof loginFormSchema>;
 type LoginFormProps = {};
 
 export default function LoginForm({}: LoginFormProps) {
+  const { login } = useAuthStore();
   const { successToast, errorToast } = useCustomToast();
   const [loading, setLoading] = useState(false);
 
@@ -51,11 +53,15 @@ export default function LoginForm({}: LoginFormProps) {
     },
   });
 
-  const onSubmit = async (inputs: LoginFormInput) => {
+  const loginHandler = async (inputs: LoginFormInput) => {
     setLoading(true);
     try {
-      const data = await authApi.login(inputs);
+      
+      const { accessToken, user } = await authApi.login(inputs);
+      login(user, accessToken);
+      localStorage.setItem("token", accessToken);
       successToast("Sucesso: Login", "Login realizado com sucesso");
+
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 403)
@@ -65,7 +71,7 @@ export default function LoginForm({}: LoginFormProps) {
           );
       } else {
         errorToast(
-          "Error: Login",
+          "Error: Desconhecido",
           "Algo deu errado. Tente novamente mais tarde."
         );
       }
@@ -91,7 +97,7 @@ export default function LoginForm({}: LoginFormProps) {
         <Form {...form}>
           <form
             id="short-url-form"
-            onSubmit={form.handleSubmit(onSubmit)}
+            onSubmit={form.handleSubmit(loginHandler)}
             className="space-y-4"
           >
             <FormField

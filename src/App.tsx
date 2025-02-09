@@ -8,8 +8,11 @@ import UrlPagePage from "./pages/url/UrlPage";
 import UrlAccessPage from "./pages/url-access/UrlAccessPage";
 import UrlRedirectPage from "./pages/url-redirect/UrlRedirectPage";
 import { Toaster } from "@/components/ui/toaster";
+import useAuth from "./hooks/useAuth";
 
 function App() {
+  const { user } = useAuth();
+
   return (
     <>
       <Header />
