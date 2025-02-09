@@ -22,6 +22,10 @@ import { useState } from "react";
 import { Button } from "../ui/Button";
 import { LogInIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import authApi from "@/api/auth.api";
+import { AxiosError } from "axios";
+import useCustomToast from "@/hooks/useCustomToast";
+import { ApiError } from "@/api/ApiError";
 
 const loginFormSchema = z.object({
   email: z
@@ -36,6 +40,7 @@ type LoginFormInput = z.infer<typeof loginFormSchema>;
 type LoginFormProps = {};
 
 export default function LoginForm({}: LoginFormProps) {
+  const { successToast, errorToast } = useCustomToast();
   const [loading, setLoading] = useState(false);
 
   const form = useForm<LoginFormInput>({
@@ -46,11 +51,27 @@ export default function LoginForm({}: LoginFormProps) {
     },
   });
 
-  function onSubmit(values: LoginFormInput) {
+  const onSubmit = async (inputs: LoginFormInput) => {
     setLoading(true);
-    console.log(values);
+    try {
+      const data = await authApi.login(inputs);
+      successToast("Sucesso: Login", "Login realizado com sucesso");
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 403)
+          errorToast(
+            "Error: Login",
+            "Verifique suas credenciais e tente novamente"
+          );
+      } else {
+        errorToast(
+          "Error: Login",
+          "Algo deu errado. Tente novamente mais tarde."
+        );
+      }
+    }
     setLoading(false);
-  }
+  };
 
   const { invalid: isEmailFieldInvalid, isTouched: isEmailFieldTouched } =
     form.getFieldState("email");
@@ -85,9 +106,6 @@ export default function LoginForm({}: LoginFormProps) {
                       placeholder="Seu email"
                       className={cn(
                         "focus-visible:ring-transparent",
-                        // !isEmailFieldInvalid &&
-                        //   isEmailFieldTouched &&
-                        //   "border-emerald-500",
                         isEmailFieldInvalid &&
                           isEmailFieldTouched &&
                           "border-red-500"
@@ -113,9 +131,6 @@ export default function LoginForm({}: LoginFormProps) {
                       autoComplete="on"
                       className={cn(
                         "focus-visible:ring-transparent",
-                        // !isPasswordFieldInvalid &&
-                        //   isPasswordFieldTouched &&
-                        //   "border-emerald-500",
                         isPasswordFieldInvalid &&
                           isPasswordFieldTouched &&
                           "border-red-500"
