@@ -27,7 +27,7 @@ import authApi from "@/api/auth.api";
 import useCustomToast from "@/hooks/useCustomToast";
 import { AxiosError } from "axios";
 import useAuthStore from "@/store/authStore";
-import { redirect } from "react-router";
+import { redirect, useNavigate } from "react-router";
 
 const registerFormSchema = z.object({
   name: z.string().min(1, "Nome é obrigatório"),
@@ -43,6 +43,7 @@ type RegisterFormInput = z.infer<typeof registerFormSchema>;
 type RegisterFormProps = {};
 
 export default function RegisterForm({}: RegisterFormProps) {
+  const navigate = useNavigate();
   const authStore = useAuthStore();
   const { successToast, errorToast } = useCustomToast();
   const [loading, setLoading] = useState(false);
@@ -71,7 +72,7 @@ export default function RegisterForm({}: RegisterFormProps) {
       authStore.login(user, accessToken);
       form.reset();
       successToast("Sucesso: Cadastro", "Cadastro realizado com sucesso");
-      redirect("/");
+      navigate("/");
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 409)

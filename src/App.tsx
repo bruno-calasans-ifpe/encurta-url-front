@@ -15,10 +15,10 @@ function App() {
 
   return (
     <>
-      <Header />
       {/* main */}
-      <ContentContainer>
-        <BrowserRouter>
+      <BrowserRouter>
+        <Header />
+        <ContentContainer>
           <Routes>
             <Route path="/auth/login" element={<LoginPage />} />
             <Route path="/auth/register" element={<RegisterPage />} />
@@ -27,9 +27,9 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/:urlId" element={<UrlRedirectPage />} />
           </Routes>
-        </BrowserRouter>
-      </ContentContainer>
-      <Toaster />
+        </ContentContainer>
+        <Toaster />
+      </BrowserRouter>
       {/* Footer */}
     </>
   );
