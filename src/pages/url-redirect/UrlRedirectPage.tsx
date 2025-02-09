@@ -1,32 +1,54 @@
+import urlApi from "@/api/url.api";
+import urlAccessApi from "@/api/urlAccess.api";
 import Overlay from "@/components/custom/Overlay";
 import TextLoader from "@/components/custom/TextLoader";
 import UrlError from "@/components/custom/UrlError";
-import useUrl from "@/hooks/useUrl";
+import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useParams } from "react-router";
 
-type UrlRedirectPageProps = {};
-
-export default function UrlRedirectPage({}: UrlRedirectPageProps) {
+export default function UrlRedirectPage() {
   const { urlId } = useParams();
-  const { url, loading, error } = useUrl({ urlId: +urlId! });
+
+  // Pega a URL
+  const {
+    data: urlData,
+    isLoading: urlLoading,
+    error: urlError,
+  } = useQuery({
+    queryKey: ["getUrl", urlId],
+    queryFn: () => urlApi.getByShortUrl(urlId!),
+  });
+
+  // Cria acesso para url
+  const {
+    data: urlAccessData,
+    isLoading: urlAccessLoading,
+    error: urlAccessError,
+  } = useQuery({
+    queryKey: ["create-access", urlId],
+    queryFn: () => urlAccessApi.create({ url_id: urlData?.url.id! }),
+    enabled: !!urlData,
+  });
+
+  const redirectToUrl = async () => {
+    if (!urlData || !urlAccessData) return;
+    window.location.replace(urlData.url.fullUrl);
+  };
 
   useEffect(() => {
-    if (url) {
-      console.log(url);
-      window.location.replace(url.fullUrl);
-    }
-  }, [url]);
+    redirectToUrl();
+  }, [urlData, urlAccessData]);
 
-  if (loading) {
+  if (urlLoading || urlAccessLoading) {
     return (
       <Overlay>
-        <TextLoader title="Carregando..." />;
+        <TextLoader title="Redirecionando..." />;
       </Overlay>
     );
   }
 
-  if (error) {
+  if (urlError || urlAccessError) {
     return (
       <Overlay>
         <UrlError

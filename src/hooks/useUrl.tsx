@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Url } from "@/types/Url.type";
-import { URL_DATA } from "@/data/urls.data";
+import urlApi from "@/api/url.api";
 
 type UseUrlProps = {
-  urlId: number;
+  urlId: string | number;
 };
 
 export default function useUrl({ urlId }: UseUrlProps) {
@@ -11,17 +11,16 @@ export default function useUrl({ urlId }: UseUrlProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const loadUrl = () => {
+  const loadUrl = async () => {
     setLoading(true);
 
-    const foundUrl = URL_DATA.find((url) => url.id === urlId);
-
-    if (!foundUrl) setError(true);
-    else setUrl(foundUrl);
-
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
+    try {
+      const { url: foundUrl } = await urlApi.get(urlId);
+      setUrl(foundUrl);
+    } catch (error) {
+      setError(true);
+    }
+    setLoading(false);
   };
 
   useEffect(() => {

@@ -2,18 +2,21 @@ import { redirect, useParams } from "react-router";
 import UrlInfo from "@/components/url/UrlInfo";
 import UrlOtherActions from "../../components/url/UrlOtherActions";
 import UrlTitle from "@/components/url/UrlTitle";
-import Loader from "@/components/custom/Loader";
-import useUrl from "@/hooks/useUrl";
 import UrlError from "@/components/custom/UrlError";
 import TextLoader from "@/components/custom/TextLoader";
+import { useQuery } from "@tanstack/react-query";
+import urlApi from "@/api/url.api";
 
 type UrlPagePageProps = {};
 
 export default function UrlPagePage({}: UrlPagePageProps) {
   const { urlId } = useParams();
-  const { url, loading, error } = useUrl({ urlId: +urlId! });
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["getUrl", urlId],
+    queryFn: () => urlApi.get(urlId!),
+  });
 
-  if (loading) {
+  if (isLoading) {
     return <TextLoader title="Carregando URL..." />;
   }
 
@@ -26,10 +29,12 @@ export default function UrlPagePage({}: UrlPagePageProps) {
     );
   }
 
-  if (!urlId || !url) {
+  if (!urlId || !data) {
     redirect("/");
     return null;
   }
+
+  const { url } = data;
 
   return (
     <section className="flex flex-col gap-3">
