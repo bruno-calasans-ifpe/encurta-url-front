@@ -37,22 +37,22 @@ export default function UrlDropdownMenu({ urls, urlId }: UrlDropdownMenuProps) {
 
       <DropdownMenuContent align="end" className="flex flex-col gap-1 p-2">
         {/* Edit URL */}
-        <DropdownMenuItem asChild className="p-0">
-          <EditUrlDialog urlId={urlId} />
+        <DropdownMenuItem asChild className="p-1">
+          <EditUrlDialog />
         </DropdownMenuItem>
 
         {/* Botão para ver detalhes da URL */}
-        <DropdownMenuItem asChild className="p-0">
+        <DropdownMenuItem asChild className="p-1 cursor-pointer">
           <ShowUrlInfoBtn urlId={urlId} />
         </DropdownMenuItem>
 
         {/* Botão para ver acessos da URL */}
-        <DropdownMenuItem asChild className="p-0">
+        <DropdownMenuItem asChild className="p-1 cursor-pointer">
           <ShowUrlAccessesBtn urlId={urlId} />
         </DropdownMenuItem>
 
         {/* Remove URL dropdown */}
-        <DropdownMenuItem asChild>
+        <DropdownMenuItem asChild className="p-1 cursor-pointer">
           <ConfirmUrlRemoveDialog />
         </DropdownMenuItem>
       </DropdownMenuContent>

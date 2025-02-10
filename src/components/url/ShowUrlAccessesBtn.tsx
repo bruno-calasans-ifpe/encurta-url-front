@@ -24,7 +24,7 @@ export default function ShowUrlAccessesBtn({
           className
         )}
       >
-        <EyeIcon />
+        <EyeIcon size={16} />
         {!icon && "Ver acessos"}
       </Button>
     </a>
