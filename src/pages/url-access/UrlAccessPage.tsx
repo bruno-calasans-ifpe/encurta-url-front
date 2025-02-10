@@ -1,14 +1,14 @@
-import { redirect, useParams } from "react-router";
+import { Navigate, useParams } from "react-router";
 import UrlAccessTitle from "@/components/url-access/UrlAccessTitle";
 import UrlAccessTable from "@/components/url-access/UrlAccessTable";
 import TextLoader from "@/components/custom/TextLoader";
 import UrlError from "@/components/custom/UrlError";
 import { useQuery } from "@tanstack/react-query";
 import urlApi from "@/api/url.api";
+import useAuth from "@/hooks/useAuth";
 
-type UrlAccessPageProps = {};
-
-export default function UrlAccessPage({}: UrlAccessPageProps) {
+export default function UrlAccessPage() {
+  const { user } = useAuth();
   const { urlId } = useParams();
   const { data, isLoading, error } = useQuery({
     queryKey: ["getUrl", urlId],
@@ -27,8 +27,12 @@ export default function UrlAccessPage({}: UrlAccessPageProps) {
   }
 
   if (!urlId || !data) {
-    redirect("/");
-    return null;
+    return <Navigate to="/" />;
+  }
+
+  // Só o usuário dono daquela URL pode acessar
+  if (data.url && user && user.id !== data.url?.user?.id) {
+    return <Navigate to="/" />;
   }
 
   return (

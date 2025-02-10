@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 import urlApi from "@/api/url.api";
 import urlAccessApi from "@/api/urlAccess.api";
 import Overlay from "@/components/custom/Overlay";
