@@ -4,6 +4,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { EditIcon } from "lucide-react";
 import { Button } from "../ui/Button";
@@ -25,6 +26,10 @@ export default function EditUrlDialog() {
         <DialogHeader>
           <DialogTitle>Editar URL</DialogTitle>
         </DialogHeader>
+        <DialogDescription>
+          Ao salvar as mudanças, apenas a URL completa será modificada. Marque o
+          checkbox abaixo para regenerar outra URL curta.
+        </DialogDescription>
         <EditUrlForm />
       </DialogContent>
     </Dialog>

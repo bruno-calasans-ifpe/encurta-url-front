@@ -3,6 +3,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "../ui/input";
@@ -18,9 +19,11 @@ import useAuthStore from "@/store/authStore";
 import useCustomToast from "@/hooks/useCustomToast";
 import { useQueryClient } from "@tanstack/react-query";
 import { DialogClose } from "../ui/dialog";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const editUrlFormSchema = z.object({
   fullUrl: z.string().min(1, "URL não pode estar vazia").url("URL inválida"),
+  regenerateNewShortUrl: z.boolean().default(false).optional(),
 });
 
 type EditUrlInputs = z.infer<typeof editUrlFormSchema>;
@@ -36,14 +39,28 @@ export default function EditUrlForm() {
     resolver: zodResolver(editUrlFormSchema),
     defaultValues: {
       fullUrl: url?.fullUrl,
+      regenerateNewShortUrl: false,
     },
   });
 
-  const editUrlHandler = async (inputs: EditUrlInputs) => {
+  const editUrlHandler = async ({
+    regenerateNewShortUrl,
+    fullUrl,
+  }: EditUrlInputs) => {
     if (!user || !url) return;
     setLoading(true);
     try {
-      await urlApi.editUrl(url.id, inputs);
+      if (regenerateNewShortUrl) {
+        console.log("Regenerando nova URL Curta....");
+        await urlApi.editUrl(url.id, {
+          redirectUrl: location.origin,
+          fullUrl,
+        });
+      } else {
+        console.log("Regenerando atualizando URL....");
+        await urlApi.editUrl(url.id, { fullUrl });
+      }
+
       await client.refetchQueries({
         queryKey: ["getUserUrls"],
       });
@@ -54,7 +71,7 @@ export default function EditUrlForm() {
     setLoading(false);
   };
 
-  console.log(url);
+  console.log(import.meta.env.VITE_BASE_API_URL);
 
   return (
     <Form {...form}>
@@ -75,6 +92,24 @@ export default function EditUrlForm() {
                   placeholder="Cole sua URL aqui"
                   className={cn("h-16 focus-visible:ring-transparent")}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="regenerateNewShortUrl"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl className="flex items-center gap-1">
+                <FormLabel className="m-0">
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                  Regenerar outra URL curta
+                </FormLabel>
               </FormControl>
               <FormMessage />
             </FormItem>

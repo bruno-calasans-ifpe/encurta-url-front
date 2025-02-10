@@ -23,7 +23,6 @@ function App() {
         <Header />
         <ContentContainer>
           <Routes>
-            
             {/* Rotas públicas */}
             <Route path="/" element={<HomePage />} />
             <Route path="/:urlId" element={<UrlRedirectPage />} />
