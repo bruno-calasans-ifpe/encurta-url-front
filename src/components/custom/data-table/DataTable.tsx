@@ -69,7 +69,7 @@ export default function DataTable<T>({ data, columns }: DataTableProps<T>) {
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                Sem resultados.
               </TableCell>
             </TableRow>
           )}

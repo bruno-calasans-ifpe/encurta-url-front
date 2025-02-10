@@ -1,5 +1,4 @@
 import api from "@/lib/axios";
-import { Url } from "@/types/Url.type";
 import { UrlAccess } from "@/types/UrlAccess.type";
 
 export type CreateAccessUrlInput = {
@@ -14,14 +13,10 @@ export default {
     );
     return data;
   },
-  async get(id: string) {
-    const { data } = await api.get<{ message: string; url: Url }>(`/url/${id}`);
-    return data;
-  },
-  async getByShortUrl(shortUrl: string) {
-    const { data } = await api.get<{ message: string; url: Url }>(
-      `/url/${shortUrl}?byShortUrl=true`
-    );
-    return data;
-  },
+  //   async getByUrlId(urlId: string) {
+  //     const { data } = await api.get<{ message: string; urlAccess: UrlAccess }>(
+  //       `/url-access/${urlId}`
+  //     );
+  //     return data;
+  //   },
 };

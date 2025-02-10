@@ -44,7 +44,9 @@ export default function UserMenu() {
           <MenubarSeparator />
           <MenubarItem className="flex items-center gap-1">
             <LinkIcon size={16} />
-            Minhas URLS
+            <a href="/my-urls" className="w-full">
+              Minhas URLS
+            </a>
           </MenubarItem>
           <MenubarItem
             onClick={logoutHandler}

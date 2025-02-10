@@ -14,8 +14,9 @@ import {
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
   column: Column<TData, TValue>;
-  title: string;
+  title?: string;
   showHide?: boolean;
+  showSorter?: boolean;
 }
 
 export function DataTableColumnHeader<TData, TValue>({
@@ -23,6 +24,7 @@ export function DataTableColumnHeader<TData, TValue>({
   title,
   className,
   showHide,
+  showSorter,
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
@@ -32,20 +34,22 @@ export function DataTableColumnHeader<TData, TValue>({
     <div className={cn("flex items-center space-x-2", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-3 h-8 data-[state=open]:bg-accent"
-          >
-            <span>{title}</span>
-            {column.getIsSorted() === "desc" ? (
-              <ArrowDown />
-            ) : column.getIsSorted() === "asc" ? (
-              <ArrowUp />
-            ) : (
-              <ChevronsUpDown />
-            )}
-          </Button>
+          {title && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="-ml-3 h-8 data-[state=open]:bg-accent"
+            >
+              <span>{title}</span>
+              {column.getIsSorted() === "desc" ? (
+                <ArrowDown />
+              ) : column.getIsSorted() === "asc" ? (
+                <ArrowUp />
+              ) : (
+                <ChevronsUpDown />
+              )}
+            </Button>
+          )}
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
           <DropdownMenuItem onClick={() => column.toggleSorting(false)}>

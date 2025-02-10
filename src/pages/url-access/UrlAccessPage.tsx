@@ -1,17 +1,21 @@
 import { redirect, useParams } from "react-router";
 import UrlAccessTitle from "@/components/url-access/UrlAccessTitle";
 import UrlAccessTable from "@/components/url-access/UrlAccessTable";
-import useUrl from "@/hooks/useUrl";
 import TextLoader from "@/components/custom/TextLoader";
 import UrlError from "@/components/custom/UrlError";
+import { useQuery } from "@tanstack/react-query";
+import urlApi from "@/api/url.api";
 
 type UrlAccessPageProps = {};
 
 export default function UrlAccessPage({}: UrlAccessPageProps) {
   const { urlId } = useParams();
-  const { url, loading, error } = useUrl({ urlId: +urlId! });
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["getUrl", urlId],
+    queryFn: () => urlApi.get(urlId!),
+  });
 
-  if (loading) return <TextLoader title="Carregando dados..." />;
+  if (isLoading) return <TextLoader title="Carregando dados..." />;
 
   if (error) {
     return (
@@ -22,15 +26,15 @@ export default function UrlAccessPage({}: UrlAccessPageProps) {
     );
   }
 
-  if (!urlId || !url) {
+  if (!urlId || !data) {
     redirect("/");
     return null;
   }
 
   return (
     <section className="flex flex-col gap-4">
-      <UrlAccessTitle url={url} />
-      <UrlAccessTable accesses={url.accesses} />
+      <UrlAccessTitle url={data.url} />
+      <UrlAccessTable accesses={data.url.accesses} />
     </section>
   );
 }

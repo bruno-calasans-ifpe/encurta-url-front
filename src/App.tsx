@@ -7,8 +7,9 @@ import ContentContainer from "./components/custom/ContentContainer";
 import UrlPagePage from "./pages/url/UrlPage";
 import UrlAccessPage from "./pages/url-access/UrlAccessPage";
 import UrlRedirectPage from "./pages/url-redirect/UrlRedirectPage";
-import { Toaster } from "@/components/ui/toaster";
 import useAuth from "./hooks/useAuth";
+import MyUrlspage from "./pages/my-urls/MyUrlsPage";
+import { Toaster } from "@/components/ui/toaster";
 
 function App() {
   const { user } = useAuth();
@@ -26,11 +27,11 @@ function App() {
             <Route path="/url-access/:urlId" element={<UrlAccessPage />} />
             <Route path="/" element={<HomePage />} />
             <Route path="/:urlId" element={<UrlRedirectPage />} />
+            <Route path="/my-urls" element={<MyUrlspage />} />
           </Routes>
         </ContentContainer>
         <Toaster />
       </BrowserRouter>
-      {/* Footer */}
     </>
   );
 }
