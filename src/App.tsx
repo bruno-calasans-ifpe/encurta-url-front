@@ -10,6 +10,7 @@ import UrlRedirectPage from "./pages/url-redirect/UrlRedirectPage";
 import useAuth from "./hooks/useAuth";
 import MyUrlspage from "./pages/my-urls/MyUrlsPage";
 import { Toaster } from "@/components/ui/toaster";
+import AuthGuardian from "./components/auth/AuthGuardian";
 
 function App() {
   const {} = useAuth();
@@ -23,11 +24,13 @@ function App() {
           <Routes>
             <Route path="/auth/login" element={<LoginPage />} />
             <Route path="/auth/register" element={<RegisterPage />} />
-            <Route path="/url/:urlId" element={<UrlPagePage />} />
-            <Route path="/url-access/:urlId" element={<UrlAccessPage />} />
             <Route path="/" element={<HomePage />} />
-            <Route path="/:urlId" element={<UrlRedirectPage />} />
-            <Route path="/my-urls" element={<MyUrlspage />} />
+            <Route element={<AuthGuardian />}>
+              <Route path="/my-urls" element={<MyUrlspage />} />
+              <Route path="/:urlId" element={<UrlRedirectPage />} />
+              <Route path="/url-access/:urlId" element={<UrlAccessPage />} />
+              <Route path="/url/:urlId" element={<UrlPagePage />} />
+            </Route>
           </Routes>
         </ContentContainer>
         <Toaster />
