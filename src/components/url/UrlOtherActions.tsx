@@ -1,6 +1,7 @@
 import type { Url } from "@/types/Url.type";
 import ShowAccessesBtn from "./ShowUrlAccessesBtn";
 import GoToUrlBtn from "./GoToUrlBtn";
+import ShowMyUrlsBtn from "./ShowMyUrlsBtn";
 
 type UrlOtherActionsProps = {
   url: Url;
@@ -14,6 +15,7 @@ export default function UrlOtherActions({ url }: UrlOtherActionsProps) {
         urlId={url.id}
         className="bg-amber-500 hover:bg-amber-600 text-white hover:text-white p-2"
       />
+      <ShowMyUrlsBtn />
     </div>
   );
 }

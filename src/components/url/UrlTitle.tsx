@@ -1,6 +1,4 @@
-type UrlTitleProps = {};
-
-export default function UrlTitle({}: UrlTitleProps) {
+export default function UrlTitle() {
   return (
     <div>
       <p className="text-4xl font-bold">Sua URL encurtada</p>
