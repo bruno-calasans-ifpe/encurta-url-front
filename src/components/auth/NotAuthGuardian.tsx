@@ -1,12 +1,12 @@
 import useAuth from "@/hooks/useAuth";
+import { Overlay } from "@radix-ui/react-dialog";
 import TextLoader from "../custom/TextLoader";
-import Overlay from "../custom/Overlay";
 import { Navigate, Outlet } from "react-router";
 
-export default function AuthGuardian() {
-  const { user, checked, loading } = useAuth();
+type NotAuthGuardianProps = {};
 
-  console.log("Checking auth...");
+export default function NotAuthGuardian({}: NotAuthGuardianProps) {
+  const { user, checked, loading } = useAuth();
 
   if (loading) {
     return (
@@ -16,7 +16,8 @@ export default function AuthGuardian() {
     );
   }
 
-  if (!user && checked) {
+  // Redireciona se estiver autenticado
+  if (user && checked) {
     return <Navigate to="/" />;
   }
 

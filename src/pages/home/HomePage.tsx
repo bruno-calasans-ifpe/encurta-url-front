@@ -3,7 +3,6 @@ import ShortUrlForm from "@/components/home/ShortUrlForm";
 type HomePageProps = {};
 
 export default function HomePage({}: HomePageProps) {
-  console.log(new Date().toLocaleString("pt-Br"));
   return (
     <section className="flex">
       <div className="flex flex-col flex-1 gap-5">

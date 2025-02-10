@@ -11,6 +11,7 @@ import useAuth from "./hooks/useAuth";
 import MyUrlspage from "./pages/my-urls/MyUrlsPage";
 import { Toaster } from "@/components/ui/toaster";
 import AuthGuardian from "./components/auth/AuthGuardian";
+import NotAuthGuardian from "./components/auth/NotAuthGuardian";
 
 function App() {
   const {} = useAuth();
@@ -22,12 +23,20 @@ function App() {
         <Header />
         <ContentContainer>
           <Routes>
-            <Route path="/auth/login" element={<LoginPage />} />
-            <Route path="/auth/register" element={<RegisterPage />} />
+            
+            {/* Rotas públicas */}
             <Route path="/" element={<HomePage />} />
+            <Route path="/:urlId" element={<UrlRedirectPage />} />
+
+            {/* Não pode estar autenticado para acessar */}
+            <Route element={<NotAuthGuardian />}>
+              <Route path="/auth/login" element={<LoginPage />} />
+              <Route path="/auth/register" element={<RegisterPage />} />
+            </Route>
+
+            {/* Precisa estar atutenticado para acessar */}
             <Route element={<AuthGuardian />}>
               <Route path="/my-urls" element={<MyUrlspage />} />
-              <Route path="/:urlId" element={<UrlRedirectPage />} />
               <Route path="/url-access/:urlId" element={<UrlAccessPage />} />
               <Route path="/url/:urlId" element={<UrlPagePage />} />
             </Route>

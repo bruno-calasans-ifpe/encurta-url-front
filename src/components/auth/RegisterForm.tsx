@@ -60,6 +60,7 @@ export default function RegisterForm({}: RegisterFormProps) {
   const registerUserHandler = async (inputs: RegisterFormInput) => {
     setLoading(true);
     try {
+
       // Cadastra usuário
       const { user } = await authApi.register(inputs);
 
@@ -69,10 +70,18 @@ export default function RegisterForm({}: RegisterFormProps) {
         password: inputs.password,
       });
 
+      // Salva dados de login em memória
       authStore.login(user, accessToken);
+      localStorage.setItem("token", accessToken);
+
+      // Reseta formulário
       form.reset();
-      successToast("Sucesso: Cadastro", "Cadastro realizado com sucesso");
+
+      // Vai para página inicial
       navigate("/");
+
+      successToast("Sucesso: Cadastro", "Cadastro realizado com sucesso");
+      
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 409)
