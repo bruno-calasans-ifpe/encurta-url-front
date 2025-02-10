@@ -12,7 +12,7 @@ import MyUrlspage from "./pages/my-urls/MyUrlsPage";
 import { Toaster } from "@/components/ui/toaster";
 
 function App() {
-  const { user } = useAuth();
+  const {} = useAuth();
 
   return (
     <>

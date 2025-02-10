@@ -1,9 +1,12 @@
 import authApi from "@/api/auth.api";
 import useAuthStore from "@/store/authStore";
 import { useEffect } from "react";
+import useCustomToast from "./useCustomToast";
+import { redirect } from "react-router";
 
 export default function useAuth() {
   const { user, accessToken, login, logout } = useAuthStore();
+  const { errorToast } = useCustomToast();
 
   const checkAuth = async () => {
     try {
@@ -18,6 +21,8 @@ export default function useAuth() {
       login(data.user, token);
     } catch (error) {
       logout();
+      errorToast("Logout", "Você foi deslogado");
+      redirect("/");
     }
   };
 
